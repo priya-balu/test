@@ -1,0 +1,108 @@
+<html>
+<body>
+<h>User details:</h>      
+<form>
+      <table>
+        <tr>
+           <td>Emp_id:</td><td><input type="text" name="emp_id" id="emp_id" required></td>
+        </tr><br>
+        <tr>
+            <td>Name:</td><td><input type="text" name="name" id="name" required></td>
+        </tr><br>
+        <tr>
+            <td>Mail_id:</td><td><input type="text" name="mail_id" id="mail_id" required></td>
+         </tr><br>
+        <tr>
+           <td>Team:</td><td><input type="text" name="team" id="team" required></td>
+        </tr><br>
+        </table>
+        <input type="button" value="save" onclick="js()">
+        <input type="button" value="viewdata" onclick="jq()">
+        <input type="button" value="download" onclick="csv()"><br><br>
+    </form>
+<h>View user details:</h>
+<form>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Emp_id: </th>
+            <th>Name</th>
+            <th>Mail_id:</th>
+            <th>Team:</th>
+        </tr>
+        </thead>
+        <tbody id="output">
+        </tbody>
+    </table>
+</form>
+
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+    function js()
+    {
+      
+    var csrf_token = '{{ csrf_token }}';
+    $.ajax({
+      url: "/dashboard",
+      type:"POST",
+      data: {emp_id:$('#emp_id').val(),
+             name:$('#name').val(),
+             mail_id:$('#mail_id').val(),
+             team:$('#team').val(),
+             csrfmiddlewaretoken:"{{csrf_token}}"
+             },
+      success: function (submitdata) {
+     
+        // if form.is_valid():
+        // {
+        //   form.save()
+          alert("success");
+        // }
+      }   
+    });
+    }
+    function jq()
+    {
+       
+        var csrf_token = '{{ csrf_token }}';
+    $.ajax({
+        type:'POST',
+        url:'/view ',
+        data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        success:function(data){
+                
+            $("#output").html('')
+            $("#output").append(data)
+    // //   url: "/dashboard",
+    // //  data: {emp_id:$('#emp_id').val(),
+    // //          name:$('#name').val(),
+    // //          mail_id:$('#mail_id').val(),
+    // //          team:$('#team').val(),
+    // //          csrfmiddlewaretoken:"{{csrf_token}}"
+    // //          }, 
+    // // success: function (getdata)
+    // { 
+        alert(data);
+                   
+       }  
+    });
+    }
+    function csv()
+    {
+       
+       var csrf_token = '{{ csrf_token }}';
+   $.ajax({
+       type:'POST',
+       url:'/csv',
+       data:{'csrfmiddlewaretoken': '{{ csrf_token }}'},
+       success:function(data){
+               
+           $("#output").html('')
+           $("#output").append(data)
+       }
+   });
+    }
+
+</script>
+</html>

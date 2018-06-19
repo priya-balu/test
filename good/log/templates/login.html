@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html >
+<body>
+
+  <form method="POST">
+    <input id="username" type="text" name="username" placeholder="Username"/>
+    <input id="userpass"  type="password" name="userpass" placeholder="Password"/>
+    <button type="submit">login</button>
+  </form>
+</div>
+</body>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+    var csrf_token = '{{ csrf_token }}';
+    $.ajax({
+      url: "/login",
+      type:"POST",
+      data: {username:$('#username').val(),
+             userpass:$('#userpass').val(),
+             csrfmiddlewaretoken:"{{csrf_token}}"
+             },
+      success: function (dat) {
+        alert(dat);
+        if (dat == "success")
+        {
+          
+          alert("success");
+        }
+        else{
+          // alert("Wrong");
+         
+      }
+    });
+ </script>
+
+</html>
