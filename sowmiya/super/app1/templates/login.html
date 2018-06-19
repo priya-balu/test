@@ -1,0 +1,75 @@
+<html>
+<body>
+<div id="login_form" >
+    <form name="f1" method="POST">
+        <table>
+            <tr>
+                <td class="f1_label">User Name :</td><td><input type="text" id="username" />
+                </td>
+            </tr>
+            <tr>
+                <td class="f1_label">Password:</td><td><input type="password" id="userpass"   />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                <input type="button" onclick="login()" value="Submit"  />
+                </td>
+            </tr>
+        </table>
+    </form> 
+<style>
+#login_form {
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    right: 30%;
+    bottom: 30%;
+    font-size: 18px;
+}
+
+#f1 {
+    background-color: #000080;
+    border-style: dotted;
+    border-width: 300px;
+}
+.f1_label {
+    white-space: nowrap;
+}
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+</style>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script>  
+
+function login(){
+    $.ajax({
+        url: "/login",
+        type:"POST",
+        data: {username:$('#username').val(),
+               userpass:$('#userpass').val(),
+            csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+        success: function (data) {
+        if (data == 'success')
+        {
+           alert("success");
+        }
+        else{
+            alert("Wrong");
+        }
+        }
+    });
+}
+</script>
+</body>
+</html>
+
