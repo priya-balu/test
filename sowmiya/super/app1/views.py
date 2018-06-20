@@ -6,6 +6,7 @@ from app1.models import *
 from django.contrib.auth import login as auth_login
 
 
+
 # Create your views here.
 def index(request):
     if request.user.is_authenticated:
@@ -51,3 +52,24 @@ def emp_details(request):
    if request.method == "POST":  
        d = Dashboard_details.objects.values()
        return render(request, "empdetails.html", {"emp":d})
+
+def some_view(request):
+    import csv
+    result = []
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Dashboard_details.csv"'
+    writer = csv.writer(response)
+    d = Dashboard_details.objects.all()
+    print d
+    writer.writerow(['employee_name', 'employee_id', 'team', 'employee_email'])
+    for i in d:
+       result.append([ i.employee_name, i.employee_id, i.team, i.employee_email])
+    print result
+    for j in result:
+        writer.writerow(j)
+
+    return response
+    
+
+
+

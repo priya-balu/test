@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^logout', auth_logout),
     url(r'^dashboard', dashboard),
     url(r'^details', emp_details),
+    url(r'^download', some_view),
 ]

@@ -59,7 +59,7 @@ button:hover {
 }
 
 
-.savebtn, .viewbtn {
+.savebtn, .viewbtn, .downloadbtn {
   float: left;
   width: 10%;
 }
@@ -151,7 +151,7 @@ hr {
         <div class="clearfix">
         <button type="button" onclick="saveForm()" class="savebtn">Save</button>
         <button type="button" onclick="viewDetails()" class="viewbtn">View details</button><br><br><br><br>     
-
+        <button type="button" onclick="download()" class="downloadbtn">download</button><br><br>
         <h2>View Employee details</h2>
  
         <table >
@@ -191,6 +191,7 @@ hr {
             }
      }); 
     }
+
     function viewDetails() {
     $.ajax({
         url: "/details",
@@ -202,6 +203,21 @@ hr {
             $('#emp').html(' ')
             $('#emp').append(data)
            }
+    });
+    }
+    
+    function download() {
+    $.ajax({
+        url: "/download",
+        type:"POST",
+        data: { 
+              csrfmiddlewaretoken: "{{csrf_token}}"
+              },
+        success: function(data) {
+            $('#emp').html(' ')
+            $('#emp').append(data)
+            alert("downloaded");
+           }   
     });
     }
     
