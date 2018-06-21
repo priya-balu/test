@@ -75,13 +75,4 @@ def export_csv(request):
         return response
 
       
-    # return model._meta.fields
-    #     getattr(instance, field.name)
-    # with open('employeedetails.csv', 'wb') as csvfile:
-    #     writer = csv.writer(csvfile)
-    #     # write your header first
-    # for obj in Dashboard_details.objects.all():
-    #     row = ""
-    #     for j in test:
-    #         row += getattr(obj, j.name) + ","
-    #         writer.writerow(row)
+    
