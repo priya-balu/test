@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from log.models import *
+import csv
+
 
 def index(request):
     if request.user.is_authenticated():
@@ -40,7 +43,8 @@ def dashboard(request):
         name = request.POST.get('name',"")
         mail_id = request.POST.get('mail_id',"")
         team = request.POST.get('team',"")
-        data =employee(emp_id=emp_id, name=name, mail_id=mail_id, team=team)
+        # production = request.POST.get('production',"")
+        data =employee(emp_id=emp_id, name=name, mail_id=mail_id, team=team,)
         data.save()
         return HttpResponse("succes")
     else:
@@ -53,6 +57,27 @@ def view(request):
 
 
 def csv(request):
-    if request.method == "POST":
-        g = employee.objects.values()
-        return render(request,"csv.html",{"output":g})
+    import csv
+    result = []
+    response = HttpResponse(content_type='text/csv')    
+    response['Content-Disposition'] = 'attachment; filename="employee.csv"'
+    writer = csv.writer(response)
+    query_set = employee.objects.all()    
+    writer.writerow(['emp_id', 'name', 'mail_id', 'team', ])
+    for i in query_set:
+        result.append([i.emp_id, i.name, i.mail_id, i.team, ])
+    # print result     
+    for j in result:
+        writer.writerow(j)
+    return response
+   
+
+
+#    with open('demo.csv', 'wb') as myfile:
+#     wr = csv.writer(myfile, quoting=csv.QUOTE_ALL)
+#     wr.writerows(file_rows)
+
+#    with open('demo.csv', 'rb') as myfile:
+#     response = HttpResponse(myfile, content_type='text/csv')
+#     response['Content-Disposition'] = 'attachment; filename=demo.csv'
+#     return response
