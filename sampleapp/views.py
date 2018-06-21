@@ -40,8 +40,9 @@ def dashboard(request):
         employee_name = request.POST.get('employee_name','')
         team = request.POST.get('team','')
         employee_email = request.POST.get('employee_email','')
+        production_count = request.POST.get('production_count','')
         print employee_id,employee_name,team,employee_email
-        value = Dashboard_details(employee_id=employee_id, employee_name=employee_name, team=team, employee_email=employee_email)
+        value = Dashboard_details(employee_id=employee_id, employee_name=employee_name, team=team, employee_email=employee_email, production_count=production_count)
         value.save()
         if value is not None:
             return HttpResponse('Thanks')
@@ -65,9 +66,9 @@ def export_csv(request):
         writer = csv.writer(response)
         v = Dashboard_details.objects.all()
         print v
-        writer.writerow(['Employee ID','Employee Name','Team','Employee Email'])
+        writer.writerow(['Employee ID','Employee Name','Team','Employee Email', 'Production count'])
         for j in v:
-            values.append([j.employee_id,j.employee_name, j.team, j.employee_email])
+            values.append([j.employee_id,j.employee_name, j.team, j.employee_email, j.production_count])
             print values
         for k in values:
             writer.writerow(k)

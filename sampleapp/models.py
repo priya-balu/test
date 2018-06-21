@@ -12,5 +12,6 @@ class Dashboard_details(models.Model):
     employee_name = models.CharField(max_length=20)
     team = models.CharField(max_length=20)
     employee_email = models.CharField(max_length=20)
+    production_count = models.CharField(max_length=5)
       
 

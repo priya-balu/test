@@ -170,7 +170,10 @@ hr {
                 <option value="Software testing">Software testing</option>
         </select>
         <label for="email"><b>Email</b></label>
-      <input type="text" placeholder="Enter email" id="email" required>
+        <input type="text" placeholder="Enter email" id="email" required><br>
+        <label for="productioncount"><b>Production count</b></label>
+        <input type="text" placeholder="Enter production count" id="prodcount" required>
+
         <div class="clearfix">
         <button type="button" onclick="saveForm()" class="savebtn">Save</button>
         <button type="button" onclick="viewDetails()" class="viewbtn">View details</button><br><br><br><br>
@@ -184,6 +187,7 @@ hr {
             <th>Name</th>
             <th>Team</th>
             <th>Email</th>
+            <th>Count</th>
         </tr>
     </thead>
     <tbody id='test'>
@@ -201,6 +205,7 @@ hr {
               employee_name:$('#empname').val(),
               team:$('#teamselect').val(),
               employee_email:$('#email').val(),
+              production_count:$('#prodcount').val(),
               csrfmiddlewaretoken: "{{csrf_token}}"
             },
        success: function (dat) {
