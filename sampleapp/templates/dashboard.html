@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<title>Dashboard</title>
+   <style>
+body {font-family: Arial, Helvetica, sans-serif;
+    background-color : #eee2e2;
+}
+* {box-sizing: border-box}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+    width: 15%;
+    padding: 10px;
+    margin: 7px 0 25px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+	align-content: center;
+	
+}
+form {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+/* Add a background color when the inputs get focus */
+input[type=text]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+.styled-select {
+    background: #f1f1f1;
+    height: 29px;
+    overflow: hidden;
+    width: 200px;
+    margin-right: 16px;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+    }
+
+button:hover {
+    opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.savebtn {
+    padding: 14px 20px;
+    background-color: #368ff4;
+    margin-right: 16px;
+}
+.exportbtn {
+    padding: 14px 20px;
+    background-color: #3a3403;
+    margin-right: 16px;
+    float: right;
+    }
+/* Float cancel and signup buttons and add an equal width */
+.savebtn, .viewbtn, .exportbtn{
+  float: left;
+  width: 10%;
+}
+/* .logoutbtn {
+    padding: 14px 20px;
+    background-color: #4CAF50;
+    margin-right: 16px;
+} */
+
+/* Add padding to container elements */
+.container {
+    padding: 16px;
+}
+
+/* The Modal (back	ground) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #474e5d;
+    padding-top: 50px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* Style the horizontal ruler */
+hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 15px;
+}
+ .close:hover,
+.close:focus {
+    color: #f44336;
+    cursor: pointer;
+}
+
+/* Clear floats */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.topnav-right {
+  float: right;
+}
+
+#employee {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+}
+
+#employee td, #employee th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#employee tr:nth-child(even){background-color: #f2f2f2;}
+
+#employee tr:hover {background-color: #ddd;}
+
+#employee th {
+    padding-top: 10px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+</style>
+<body>
+    <form method="POST" id="myform">
+        <h2>Employee details</h2>
+      <a href="/logout" class="topnav-right">Logout</a><br><br>                
+      <label for="empid"><b>Employee ID</b></label>
+      <input type="text" placeholder="Enter ID" id="empid" required>
+
+      <label for="empname"><b>Employee name</b></label>
+      <input type="text" placeholder="Enter name" id="empname" required>
+        
+      <label for="team"><b>Team</b></label>
+      <select Value="Select team" onchange="myFunction()" class = "styled-select" name="team" id="teamselect" required>
+                <option value="0">Select Team</option>
+                <option value="IBM">IBM</option>
+                <option value="Walmart">Walmart</option>
+                <option value="Probe">Probe</option>
+                <option value="Jeevs">Jeevs</option>
+                <option value="Freshworks">Freshworks</option>
+                <option value="Pixm">Pixm</option>
+                <option value="Gooru">Gooru</option>
+                <option value="Software Development">Software Development</option>
+                <option value="Software testing">Software testing</option>
+        </select>
+        <label for="email"><b>Email</b></label>
+      <input type="text" placeholder="Enter email" id="email" required>
+        <div class="clearfix">
+        <button type="button" onclick="saveForm()" class="savebtn">Save</button>
+        <button type="button" onclick="viewDetails()" class="viewbtn">View details</button><br><br><br><br>
+        <button type="button" onclick="exportCSV()" class="exportbtn">Export CSV</button><br><br><br><br>
+ </form>
+ <h2>View Employee details</h2>
+ <table id = 'employee'>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Team</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody id='test'>
+    </tbody>
+    </table>
+ 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script>
+    function myFunction() { document.getElementById("teamselect").value; }
+    function saveForm(){
+    $.ajax({
+       url:"/dashboard",
+       type:"POST",
+       data: {employee_id:$('#empid').val(),
+              employee_name:$('#empname').val(),
+              team:$('#teamselect').val(),
+              employee_email:$('#email').val(),
+              csrfmiddlewaretoken: "{{csrf_token}}"
+            },
+       success: function (dat) {
+           if (dat != "success") 
+         {
+            alert("Form submitted");
+         }
+         else{
+           alert("Wrong");
+           }
+            }
+     }); 
+    }
+    function viewDetails() {
+    $.ajax({
+        url:"/details",
+        type:"POST",
+        data:{
+            csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+        success:function(data){
+            //alert("Success");
+            $('#test').html('')
+            $('#test').append(data)
+        }
+     });
+    }
+    
+    function exportCSV(){
+    $.ajax({
+        url:"/download",
+        type:"POST",
+        data:{
+            csrfmiddlewaretoken:"{{csrf_token}}"
+            },
+            success: function(data) {  
+                //alert("values")
+                window.open("http://127.0.0.1:8000/download")
+                
+            }
+    });
+    }
+
+</script>
+</body>
+</html>
